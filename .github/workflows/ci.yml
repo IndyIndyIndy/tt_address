@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         env:
-          - { php: 7.4, TYPO3_VERSION: ^10.4, TESTING_FRAMEWORK: ^6.5.0, COVERAGE: true }
+          - { php: 7.4, TYPO3_VERSION: ^10.4, TESTING_FRAMEWORK: ^6.6.0, COVERAGE: true }
           - { php: 7.4, TYPO3_VERSION: ^10.4, TESTING_FRAMEWORK: ^6.5.0 }
           - { php: 7.3, TYPO3_VERSION: ^10.4, TESTING_FRAMEWORK: ^6.5.0 }
           - { php: 7.4, TYPO3_VERSION: ^11.0, TESTING_FRAMEWORK: ^6.6 }
@@ -66,7 +66,7 @@ jobs:
       - name: Install phpcov
         if: ${{ matrix.env.COVERAGE }}
         run: |
-          composer require "phpunit/phpcov ^5";
+          composer require "phpunit/phpcov ^6";
           mkdir cov;
 
 
@@ -112,6 +112,7 @@ jobs:
 
       # upload coverage
       - name: Coverage upload
+        if: ${{ matrix.env.COVERAGE }}
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
