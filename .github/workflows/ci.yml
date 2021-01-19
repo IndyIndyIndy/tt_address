@@ -69,7 +69,8 @@ jobs:
           composer require php-coveralls/php-coveralls;
           composer require nimut/phpunit-merger;
           mkdir cov;
-          mkdir -p build/logs/clover.xml
+          mkdir -p build/logs/clover.xml;
+          chmod -R 777 ./build/
 
 
         # unit tests
@@ -118,5 +119,6 @@ jobs:
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          .Build/bin/phpunit-merger coverage ./cov ./clover.xml;
-          .Build/bin/php-coveralls --coverage_clover=./clover.xml -v
+          chmod -R 777 ./build/
+          .Build/bin/phpunit-merger coverage ./cov ./build/logs/clover.xml;
+          .Build/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
