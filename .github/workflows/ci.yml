@@ -69,7 +69,7 @@ jobs:
           composer require php-coveralls/php-coveralls;
           composer require nimut/phpunit-merger;
           mkdir cov;
-          mkdir -p build/logs/clover.xml;
+          mkdir -p build/logs/;
           chmod -R 777 ./build/
 
 
@@ -84,7 +84,7 @@ jobs:
         if: ${{ matrix.env.COVERAGE }}
         run: |
           echo "Running ${TYPO3_VERSION} unit tests with $(which php)";
-          .Build/bin/phpunit --coverage-php cov/coverage-unit.cov -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml Tests/Unit/;
+          .Build/bin/phpunit --coverage-php build/logs/coverage-unit.cov -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml Tests/Unit/;
 
 
         # start db
@@ -108,7 +108,7 @@ jobs:
           export typo3DatabaseHost="127.0.0.1";
           export typo3DatabaseUsername="root";
           export typo3DatabasePassword="root";
-          .Build/bin/phpunit --coverage-php cov/coverage-functional.cov --colors -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional
+          .Build/bin/phpunit --coverage-php build/logs/coverage-functional.cov --colors -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/FunctionalTests.xml Tests/Functional
 
       - name: Reset composer.json
         run: git checkout composer.json;
@@ -120,5 +120,5 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           chmod -R 777 ./build/
-          .Build/bin/phpunit-merger coverage ./cov ./build/logs/clover.xml;
+          .Build/bin/phpunit-merger coverage ./build/logs/ ./build/logs/clover.xml;
           .Build/bin/php-coveralls --coverage_clover=build/logs/clover.xml -v
